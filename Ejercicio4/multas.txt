@@ -1,0 +1,4 @@
+1111,san justo, pepe,30
+2222,san justo,jose,2000
+2222,catan,jose,5000
+3333,san justo,nico,20000
