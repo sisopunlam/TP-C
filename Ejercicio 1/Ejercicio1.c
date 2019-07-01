@@ -105,6 +105,7 @@ printf("\n");
 							printf("PID: %d - Pid Padre: %d - Parentezco: Hijo - Tipo: Normal\n",getpid(),getppid());
 							acum=0;
 							while(acum<1000000){
+								sleep(10);
 								acum++;		
 							}
 exit(1);
@@ -166,7 +167,11 @@ exit(1);
 						kill (pid8, SIGKILL);
 						kill (pid9, SIGKILL);
 						kill (pid10, SIGKILL);*/
-return 0;
+					for(int i=0;i<10;i++){
+					wait(pid);
+					}
+							sleep(10);
+							return 0;
 				
 			}
 				
@@ -199,7 +204,7 @@ return 0;
 					i=0;
 					j=0;
 					char t;
-					pid_t  pid2;
+					pid_t  pid2=fork();
 					if(pid2 == -1){
 						printf("No se puede crear Proceso");
 						exit(0);
