@@ -28,8 +28,8 @@ void vaciarLista(tLista *p);
 
 int cargarListaConArchivo(tLista *pLista, const char *archivo);
 int cargarRegistroEnListaYArchivo(tLista *pLista, const char *archivo, const char *linea);
-float promedioPartido(const tLista *p, unsigned long patente, const char *partido);
-float promedioGeneral(const tLista *p, unsigned long patente);
+float multasPartido(const tLista *p, unsigned long patente, const char *Partido);
+float registrosSuspender(const tLista *p, unsigned long patente);
 float cancelarDeuda(const tLista *p, unsigned long patente);
 
 #endif // LISTA_H_INCLUDED

@@ -6,7 +6,10 @@
 # DNI       |APELLIDO      |NOMBRE
 #
 
-# 39463982   Meza          Julian
+# Amato, Luciano            DNI: 40.378.763        #
+# Del Greco, Juan Pablo     DNI: 38.435.945        #
+# Meza, Julian              DNI: 39.463.982        #
+# Pompeo, Nicolas Ruben     DNI: 37.276.705  				#
 
  */
 
@@ -294,7 +297,7 @@ void procesarPeticion(const char *peticion, char *respuesta)
 		///partido////
 		fin++;
 		strcpy(aux, &peticion[fin]);
-		promedio = promedioPartido(&lista, patente, aux);
+		promedio = multasPartido(&lista, patente, aux);
 
 		if (promedio == -1)
 		{
@@ -313,7 +316,7 @@ void procesarPeticion(const char *peticion, char *respuesta)
 
 		patente = strtoul(&peticion[1], &car, 10);
 
-		promedio = promedioGeneral(&lista, patente);
+		promedio = registrosSuspender(&lista, patente);
 
 		if (promedio == -1)
 		{
@@ -335,7 +338,8 @@ void procesarPeticion(const char *peticion, char *respuesta)
 		}
 		else
 		{
-			sprintf(respuesta, "Sea han cancelado todas las multas de %lu\n", patente);
+			sprintf(responder, "Funcion de cancelar multas aun en trabajo\n");
+			/*sprintf(responder, "Sea han cancelado todas las multas de %lu\n", patente);*/
 		}
 
 		////////////////////////////////////

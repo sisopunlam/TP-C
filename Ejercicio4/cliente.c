@@ -2,8 +2,10 @@
  Ejercicio 4 - Trabajo Práctico 3 - Primer entrega
 
  Integrantes:
-
-# DNI       |APELLIDO      |NOMBRE
+ # Amato, Luciano            DNI: 40.378.763        #
+ # Del Greco, Juan Pablo     DNI: 38.435.945        #
+ # Meza, Julian              DNI: 39.463.982        #
+ # Pompeo, Nicolas Ruben     DNI: 37.276.705  				#
 
  */
 
@@ -199,11 +201,6 @@ int main(int argc, char *argv[])
             printf("Ingrease nombre de titular.\n");
             scanf("%s", msg.titular);
 
-            // msg.titular = atof(peticion);
-            /// len = atoi(peticion);
-            //strcpy(msg.titular, len);
-
-
             //system("clear");
             printf("\033c"); //limpia las pantallas, solo en sistemas unix
             printf("--Menu cargar multa--\n");
@@ -213,9 +210,9 @@ int main(int argc, char *argv[])
             printf("\nIngrese un monto: ");
             scanf("%s", peticion);
             msg.monto = atof(peticion);
-            msg.cantidad_m=1;
 
-            sprintf(peticion, "a%d,%s,%s,%d,%.2f", msg.patente, msg.partido, msg.titular,msg.cantidad_m, msg.monto);
+
+            sprintf(peticion, "a%d,%s,%s,%.2f", msg.patente, msg.partido, msg.titular, msg.monto);
 
             len = send(socket_cliente, peticion, 100, 0); //Se escribe la peticion al servidor
             if (len < 0)
@@ -402,5 +399,5 @@ void ayuda()
     printf("consultar el promedio de un multas de todos los infrancores de su partido, o consultar las licencias suspendiad pde todos los partidos.\n");
     printf("\t\tLas patentes ingresados deben ser mayor a 0, de maximo 9 caracteres, el nombre del partido de minimo 1 caracter y de maximo 40 caracteres, ");
     printf("las multas ingresadas deben ser , en caso de ser necesario el separador decimal es el punto.\n");
-    printf("\nEjemplo de ejecucuion: ./cliente sisop 127.0.0.1\n");
+    printf("\nEjemplo de ejecucuion: ./cliente ramos 127.0.0.1\n");
 }

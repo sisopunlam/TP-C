@@ -123,15 +123,6 @@ int cargarListaConArchivo(tLista *pLista, const char *archivo)
         strncpy(registro.titular, &linea[ini], fin);
         registro.titular[fin - ini] = '\0';
         ////////////////////////////////////////////
-        /*//cantidad_m////
-        fin ++;
-        ini = fin;
-        while (linea[fin] != ',')
-        {
-            fin++;
-        }
-        strncpy(registro.cantidad_m, &linea[ini], fin);
-        registro.cantidad_m[fin - ini] = '\0';*/
         ////////////////////////////////////
         ///monto////
         fin++;
@@ -213,19 +204,6 @@ int cargarRegistroEnListaYArchivo(tLista *pLista, const char *archivo, const cha
     registro.titular[fin - ini] = '\0';
 
     ////////////////////////////////////
-    /*//cantidad_m////
-    fin++;
-    ini = fin;
-
-    while (linea[fin] != ',')
-    {
-        fin++;
-    }
-
-    strncpy(registro.cantidad_m, &linea[ini], fin);
-    registro.cantidad_m[fin - ini] = '\0';
-
-    */
     ///////////////////////////////////
     ///monto////
     fin++;
@@ -262,7 +240,7 @@ int mostrarLista(const tLista *p)
     return 0;
 }
 
-float promedioPartido(const tLista *p, unsigned long patente, const char *partido)
+float multasPartido(const tLista *p, unsigned long patente, const char *partido)
 {
     tNodo *nodo1 = *p;
     tNodo *nodo2;
@@ -286,7 +264,7 @@ float promedioPartido(const tLista *p, unsigned long patente, const char *partid
     return (promedio);
 }
 
-float promedioGeneral(const tLista *p, unsigned long patente)
+float registrosSuspender(const tLista *p, unsigned long patente)
 {
     tNodo *nodo1 = *p;
     tNodo *nodo2;
@@ -313,6 +291,23 @@ float promedioGeneral(const tLista *p, unsigned long patente)
 
 float cancelarDeuda(const tLista *p, unsigned long patente)
 {
+  tNodo *nodo1 = *p;
+tNodo *nodo2;
+int cont = 0;
+float montoTot = 0;
+while (nodo1 != NULL)
+{
+    if (nodo1->registro.patente == patente)
+    {
+        montoTot += nodo1->registro.monto;
+        cont++;
+    }
 
-    return -1;
+    nodo2 = nodo1;
+    nodo1 = (nodo2->sig);
+}
+
+if (cont > 3 || montoTot > 20000)
+    return (montoTot);
+return -1;
 }

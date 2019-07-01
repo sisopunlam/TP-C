@@ -207,7 +207,6 @@ int main(int argc, char *argv[])
 
             //system("clear");
             printf("\033c"); //limpia las pantallas, solo en sistemas unix
-            printf("--Menu promedio materia--\n");
             printf("--Menu multas por partido--\n");
             printf("\nIngrese la patente del conductor: ");
             scanf("%s", peticion);
