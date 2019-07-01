@@ -2,3 +2,6 @@
 2222,san justo,jose,2000
 2222,catan,jose,5000
 3333,san justo,nico,20000
+1234,lafe,jose,5000.00
+1234,lafe,joses,500.00
+666,lafe,luck,25000.00

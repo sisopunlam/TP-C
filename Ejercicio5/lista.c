@@ -32,7 +32,6 @@ tNodo *ponerEnLista(tLista *p, t_registro *registro)
     nue->registro.monto = registro->monto;
 
     nue->sig = NULL;
-
     if (listaVacia(p))
     {
         nue->ant = nue;
@@ -44,7 +43,6 @@ tNodo *ponerEnLista(tLista *p, t_registro *registro)
         (*p)->ant = nue;
         nue->ant->sig = nue;
     }
-
     return nue;
 }
 ////////////////////////////////////////////
@@ -81,7 +79,6 @@ int cargarListaConArchivo(tLista *pLista, const char *archivo)
     }
 
     int nro_opcion = 1;
-
     while (fgets(linea, 200, fp))
     {
 
@@ -122,7 +119,7 @@ int cargarListaConArchivo(tLista *pLista, const char *archivo)
 
         strncpy(registro.titular, &linea[ini], fin);
         registro.titular[fin - ini] = '\0';
-       
+
         ////////////////////////////////////
         ///monto////
         fin++;
@@ -135,7 +132,6 @@ int cargarListaConArchivo(tLista *pLista, const char *archivo)
 
         strncpy(aux, &linea[ini], fin);
         aux[fin - ini] = '\0';
-
         registro.monto = atof(aux);
 
         if (ponerEnLista(pLista, &registro) == NULL)
@@ -144,7 +140,6 @@ int cargarListaConArchivo(tLista *pLista, const char *archivo)
         }
     }
     fclose(fp);
-
     return 0;
 }
 
@@ -181,12 +176,10 @@ int cargarRegistroEnListaYArchivo(tLista *pLista, const char *archivo, const cha
     ///partido////
     fin++;
     ini = fin;
-
     while (linea[fin] != ',')
     {
         fin++;
     }
-
     strncpy(registro.partido, &linea[ini], fin);
     registro.partido[fin - ini] = '\0';
 
@@ -203,7 +196,7 @@ int cargarRegistroEnListaYArchivo(tLista *pLista, const char *archivo, const cha
     strncpy(registro.titular, &linea[ini], fin);
     registro.titular[fin - ini] = '\0';
 
-   
+
     ///////////////////////////////////
     ///monto////
     fin++;
@@ -240,7 +233,7 @@ int mostrarLista(const tLista *p)
     return 0;
 }
 
-float promedioPartido(const tLista *p, unsigned long patente, const char *materia)
+float multasPartido(const tLista *p, unsigned long patente, const char *partido)
 {
     tNodo *nodo1 = *p;
     tNodo *nodo2;
@@ -264,7 +257,7 @@ float promedioPartido(const tLista *p, unsigned long patente, const char *materi
     return (promedio);
 }
 
-float promedioGeneral(const tLista *p, unsigned long patente)
+float registrosSuspender(const tLista *p, unsigned long patente)
 {
     tNodo *nodo1 = *p;
     tNodo *nodo2;
@@ -284,13 +277,31 @@ float promedioGeneral(const tLista *p, unsigned long patente)
     }
 
     if (cont > 3 || montoTot > 20000)
+    //if (montoTot > 20000)
         return (montoTot);
-
     return -1;
 }
 
+///////////*  POR TERMINAR  *//////////////////
 float cancelarDeuda(const tLista *p, unsigned long patente)
 {
+  tNodo *nodo1 = *p;
+  tNodo *nodo2;
+  int cont = 0;
+  float montoTot = 0;
+  while (nodo1 != NULL)
+  {
+      if (nodo1->registro.patente == patente)
+      {
+          montoTot += nodo1->registro.monto;
+          cont++;
+      }
 
-    return -1;
+      nodo2 = nodo1;
+      nodo1 = (nodo2->sig);
+  }
+
+  if (cont > 3 || montoTot > 20000)
+      return (montoTot);
+  return -1;
 }

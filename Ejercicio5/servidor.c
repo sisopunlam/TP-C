@@ -3,10 +3,10 @@
 
  Integrantes:
 
-# DNI       |APELLIDO      |NOMBRE
-#
-
-# 39463982   Meza          Julian
+# Amato, Luciano            DNI: 40.378.763        #
+# Del Greco, Juan Pablo     DNI: 38.435.945        #
+# Meza, Julian              DNI: 39.463.982        #
+# Pompeo, Nicolas Ruben     DNI: 37.276.705  				#
 
  */
 
@@ -235,7 +235,7 @@ void procesarPeticion(const char *peticion, char *responder)
 		fin++;
 
 		strcpy(aux, &peticion[fin]);
-		promedio = promedioPartido(&lista, patente, aux); //esta fuincio de be ser cambiada por
+		promedio = multasPartido(&lista, patente, aux);
 
 		if (promedio == -1)
 		{
@@ -251,30 +251,29 @@ void procesarPeticion(const char *peticion, char *responder)
 	case 'c':
 		///patente////
 		patente = strtoul(&peticion[1], &car, 10);
-
-		promedio = promedioGeneral(&lista, patente);
+		promedio = registrosSuspender(&lista, patente);
 
 		if (promedio == -1)
 		{
-			sprintf(responder, "No hay multas registrados de %lu.\n", patente);
+			sprintf(responder, "El registrados de %lu no se encunetra suspendido.\n", patente);
 		}
 		else
 		{
 			sprintf(responder, "Registro a SUSPENDER\nMonto total de multas de %lu: %.2f\n", patente, promedio);
 		}
-
+		break;
 	case 'd':
 		///patente////
 		patente = strtoul(&peticion[1], &car, 10);
 		promedio = cancelarDeuda(&lista, patente);
-
 		if (promedio == -1)
 		{
 			sprintf(responder, "No hay multas registrados de %lu.\n", patente);
 		}
 		else
 		{
-			sprintf(responder, "Sea han cancelado todas las multas de %lu\n", patente);
+			sprintf(responder, "Funcion de cancelar multas aun en trabajo\n");
+			/*sprintf(responder, "Sea han cancelado todas las multas de %lu\n", patente);*/
 		}
 
 		break;
@@ -297,9 +296,7 @@ void procesarPeticion(const char *peticion, char *responder)
 			}
 		}
 		conectados--;
-
-		////////////////////////////////////
-
+		
 		break;
 	default:
 		strcpy(responder, "opcion invalida");
@@ -309,15 +306,15 @@ void procesarPeticion(const char *peticion, char *responder)
 
 void ayuda()
 {
-	printf("---------------\n\t\tEste programa es un servidor que responde a las solicitudes que hacen profesores, a travez de otro programa cliente, ");
-	printf("para agregar notas, o cunsultar promedios de alumnos, cuyas notas y parciales estan en un archivo de texto.\n");
+	printf("---------------\n\t\tEste programa es un servidor que responde a las solicitudes que hacen los usuarios, a travez de otro programa cliente, ");
+	printf("para agregar multas, o cunsultar monto de multas y licencias suspendidas que estan en un archivo de texto.\n");
 	printf("\n----Formas de usar el programa----\n");
 	printf("---------------\nservidor -h\nservidor -help\nservidor -? :\n\t\t muestran esta ayuda\n\n");
-	printf("---------------\nservidor 'max_cant_clientes' 'nombre_de_archivo_de_notas'\nservidor 'max_cant_clientes'\n\n");
+	printf("---------------\nservidor 'max_cant_clientes' 'nombre_de_archivo_de_multas'\nservidor 'max_cant_clientes'\n\n");
 	printf("\t\tAl iniciar el programa el servidor establece un maximo de clientes indicado en el primer parametro que debe ser un valor entero entre 1 y 100.\n");
-	printf("Por defecto el archivo con las notas es 'notas.txt', a menos que se le indique otro archivo con el segundo parametro se le indique otra cosa.\n");
+	printf("Por defecto el archivo con las notas es 'multas.txt', a menos que se le indique otro archivo con el segundo parametro se le indique otra cosa.\n");
 	printf("Si el archivo de texto no existe se crea, y si existe se cargan los datos y agregan al final los nuevos registros.\n");
-	printf("El archivo de notas debe estar en el directorio del programa para que lo reconozca\n");
+	printf("El archivo de multas debe estar en el directorio del programa para que lo reconozca\n");
 	printf("Solo puede correr un proceso servidor en el sistema, para que los semaforos y memoria compartida no se vean modificados incorrectamente.\n");
 	printf("\nEjemplo de ejecucuion: ./servidor 10\n");
 }

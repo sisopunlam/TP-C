@@ -5,3 +5,6 @@ servidor: servidor.c lista.c
 
 cliente: cliente.c
 		gcc -o cliente cliente.c -lpthread -lrt
+
+clean:
+			-rm -f *.o

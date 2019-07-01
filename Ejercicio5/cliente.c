@@ -3,11 +3,15 @@
 
  Integrantes:
 
-# DNI       |APELLIDO      |NOMBRE
+
+ # Amato, Luciano            DNI: 40.378.763        #
+ # Del Greco, Juan Pablo     DNI: 38.435.945        #
+ # Meza, Julian              DNI: 39.463.982        #
+ # Pompeo, Nicolas Ruben     DNI: 37.276.705  				#
 
  */
 
-include<sys / types.h>
+#include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -54,6 +58,8 @@ int main(int argc, char *argv[])
     int nTecla;
     char menu_option[100];
 
+    char titularAux[20];
+
     if (argc != 2)
     {
         printf("Debe ingresar nombre del partido.\nVea la ayuda con ./cliente -h\n");
@@ -73,7 +79,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    strcpy(msg.materia, argv[1]);
+    strcpy(msg.partido, argv[1]);
 
     //Abre semaforos para comunicar procesos
     consultar = sem_open("/consultar", 0);
@@ -172,11 +178,8 @@ int main(int argc, char *argv[])
             printf("--Menu cargar multa--\n");
             printf("PATENTE: %d\n", msg.patente);
             printf("Ingrease nombre de titular.\n");
-            scanf("%s", peticion);
-
-            msg.titular = atof(peticion);
-            // len = atoi(peticion);
-            //strcpy(msg.titular, len);
+            scanf("%s", titularAux);
+            strcpy(msg.titular, titularAux);
 
             //system("clear");
             printf("\033c"); //limpia las pantallas, solo en sistemas unix
@@ -190,7 +193,7 @@ int main(int argc, char *argv[])
 
             if (msg.monto < 0)
             {
-                printf("\n--Opcion invalida el montoa debe ser mayor a 0.--\nPresione Enter para continuar.");
+                printf("\n--Opcion invalida el monto debe ser mayor a 0.--\nPresione Enter para continuar.");
                 enterParaContinuar();
                 break;
             }
@@ -206,7 +209,7 @@ int main(int argc, char *argv[])
             printf("\033c"); //limpia las pantallas, solo en sistemas unix
             printf("--Menu promedio materia--\n");
             printf("--Menu multas por partido--\n");
-            printf("\nIngrese ela patente del conductor: ");
+            printf("\nIngrese la patente del conductor: ");
             scanf("%s", peticion);
             msg.patente = atoi(peticion);
 
@@ -361,7 +364,6 @@ void ayuda()
     printf("consultar el promedio de un infractor de  su partido, o consultar las multas de todos las multas de todos los partidos.\n");
     printf("\t\tLas patentes ingresados deben ser mayor a 0, de maximo 9 caracteres, el nombre de la materia de minimo 1 caracter y de maximo 40 caracteres, ");
     printf("las multas ingresadas deben ser mayor a 0 en caso de ser necesario el separador decimal es el punto.\n");
-    printf("\nEjemplo de ejecucuion: ./cliente sisop\n");
+    printf("\nEjemplo de ejecucuion: ./cliente ramos\n");
     printf("\nArchivo de prueba en multas.txt contiene las patentes 1111-2222-3333\n");
 }
-
