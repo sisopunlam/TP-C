@@ -326,7 +326,7 @@ void procesarPeticion(const char *peticion, char *respuesta)
 		{
 			sprintf(respuesta, "Registro a SUSPENDER\nMonto total de multas de %lu: %.2f\n", patente, promedio);
 		}
-
+		break;
 	case 'd':
 		///patente////
 		patente = strtoul(&peticion[1], &car, 10);
@@ -338,7 +338,7 @@ void procesarPeticion(const char *peticion, char *respuesta)
 		}
 		else
 		{
-			sprintf(responder, "Funcion de cancelar multas aun en trabajo\n");
+			sprintf(respuesta, "Funcion de cancelar multas aun en trabajo\n");
 			/*sprintf(responder, "Sea han cancelado todas las multas de %lu\n", patente);*/
 		}
 
