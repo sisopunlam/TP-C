@@ -24,7 +24,7 @@
 #include <fcntl.h>     //Para utilizar los flags 0
 #include <semaphore.h> //Para utilizar los semaforos POSIX
 
-    typedef struct consulta
+typedef struct consulta
 {
     int patente;
     char partido[41];
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 {
     tConsulta msg;
     int len;
-    char peticion[100];
+    char peticion[500];
     char tecla;
     int nTecla;
     char menu_option[100];
@@ -131,7 +131,9 @@ int main(int argc, char *argv[])
         printf("b. Consultar multas por partido.\n");
         printf("c. Consultar conductores suspendidos.\n");
         printf("d. cancelar multas.\n");
-        printf("e. Salir.\n");
+        printf("e. Ver todas las multas.\n");
+        
+        printf("\nx. Salir.\n");
         printf("\nIngrese una opcion: ");
 
         nTecla = 0;
@@ -197,7 +199,7 @@ int main(int argc, char *argv[])
                 enterParaContinuar();
                 break;
             }
-            sprintf(peticion, "a%d,%s,%s,%.2f", msg.patente, msg.partido, msg.titular, msg.monto);
+            sprintf(peticion, "a%d,%s,%s,1,%.2f", msg.patente, msg.partido, msg.titular, msg.monto);
             enviar(peticion);
             printf("Presione Enter para continuar\n");
             enterParaContinuar();
@@ -225,23 +227,13 @@ int main(int argc, char *argv[])
             enterParaContinuar();
             break;
 
-        case 'c': //Aca deberia enviarle el DNI ,y opcion c.
+        case 'c': //Aca deberia enviarle  opcion c.
 
             //system("clear");
             printf("\033c"); //limpia las pantallas, solo en sistemas unix
             printf("--Menu SUSPENCIONES--\n");
-            printf("\nIngrese la  patente del conductor: ");
-            scanf("%s", peticion);
-            msg.patente = atoi(peticion);
 
-            if (msg.patente < 1)
-            {
-                printf("\n--PATENTE invalido, debe ser mayor a 0.--\nPresione Enter para continuar.");
-                enterParaContinuar();
-                break;
-            }
-
-            sprintf(peticion, "c%d", msg.patente);
+            sprintf(peticion, "c%s", msg.partido);
             enviar(peticion);
             printf("Presione Enter para continuar\n");
             enterParaContinuar();
@@ -261,14 +253,24 @@ int main(int argc, char *argv[])
                 enterParaContinuar();
                 break;
             }
-
-            sprintf(peticion, "d%d", msg.patente);
+            sprintf(peticion, "d%d,%s", msg.patente, msg.partido);
             enviar(peticion);
             printf("Presione Enter para continuar\n");
             enterParaContinuar();
             break;
 
-        case 'e':
+        case 'e':            //Aca deberia enviarle  opcion c.
+            printf("\033c"); //limpia las pantallas, solo en sistemas unix
+
+            sprintf(peticion, "e%s", msg.partido);
+            enviar(peticion);
+            printf("Presione Enter para continuar\n");
+            enterParaContinuar();
+            break;
+
+        case 'x':
+            sprintf(peticion, "x%s", msg.partido);
+            enviar(peticion);
             signalHandler(1);
             break;
         default:
@@ -324,6 +326,7 @@ void enterParaContinuar()
     {
         scanf("%c", &tecla);
     }
+    
 }
 
 void enviar(const char *cad)
@@ -332,9 +335,9 @@ void enviar(const char *cad)
 
     sem_wait(consultar); //Pide la Memoria compartida para que ningun otro cliente pueda usarla
     strcpy(msj, cad);    //Escribe en Memoria compartida
-    sem_post(mensaje); //Avisa al servidor que hay un mensaje
+    sem_post(mensaje);   //Avisa al servidor que hay un mensaje
     printf("Mensaje enviado, esperando respuesta...\n");
-    sem_wait(respuesta); //Espera respuesta del servidor
+    sem_wait(respuesta);            //Espera respuesta del servidor
     printf("\033c");                //limpia las pantallas, solo en sistemas unix
     printf("Respuesta: %s\n", msj); //Imprime respuesta
 

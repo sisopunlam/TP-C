@@ -186,7 +186,8 @@ void procesarPeticion(const char *peticion, char *responder)
 	unsigned long patente;
 	int pid_cliente;
 	char *partido;
-	char aux[100];
+	char aux[200];
+	char linea[500];
 
 	switch (peticion[0])
 	{
@@ -207,7 +208,7 @@ void procesarPeticion(const char *peticion, char *responder)
 			strcpy(responder, "--Intento de conexion fallida: se ha alcanzado el maximo de conexiones posibles\n");
 		}
 		break;
-	case 'a':
+	case 'a': //Cargar una multa
 		if ((cargarRegistroEnListaYArchivo(&lista, archivo, &peticion[1])) == 1)
 		{
 			strcpy(responder, "Registro no se pudo agregar");
@@ -217,7 +218,7 @@ void procesarPeticion(const char *peticion, char *responder)
 			strcpy(responder, "Registro agregado");
 		}
 		break;
-	case 'b':
+	case 'b': //Consultar multas por partido
 		///patente////
 		ini = 1;
 		fin = 1;
@@ -248,36 +249,57 @@ void procesarPeticion(const char *peticion, char *responder)
 
 		////////////////////////////////////
 		break;
-	case 'c':
-		///patente////
-		patente = strtoul(&peticion[1], &car, 10);
-		promedio = registrosSuspender(&lista, patente);
-
+	case 'c': //Consultar conductores suspendidos
+		///partido////
+		strcpy(aux, &peticion[1]);
+		promedio = registrosSuspender(&lista, aux, linea);
 		if (promedio == -1)
 		{
-			sprintf(responder, "El registrados de %lu no se encunetra suspendido.\n", patente);
+			sprintf(responder, "No hay registros a suspendido.\n");
 		}
 		else
 		{
-			sprintf(responder, "Registro a SUSPENDER\nMonto total de multas de %lu: %.2f\n", patente, promedio);
+			sprintf(responder, "Registro a SUSPENDER\n %s",  linea);
 		}
 		break;
-	case 'd':
-		///patente////
-		patente = strtoul(&peticion[1], &car, 10);
-		promedio = cancelarDeuda(&lista, patente);
-		if (promedio == -1)
+	case 'd': //cancelar multas
+		ini = 1;
+		fin = 1;
+		while (peticion[fin] != ',')
+		{
+			fin++;
+		}
+		strncpy(aux, &peticion[ini], fin);
+		aux[fin - ini] = '\0';
+		patente = strtoul(aux, &car, 10);
+		fin++;
+
+		strcpy(aux, &peticion[fin]);
+		if (cancelarDeuda(&lista, patente, aux) != -1)
+		{
+			cargarRegistroEnArchivo(&lista, archivo);
+			sprintf(responder, "Sea han cancelado todas las multas de %lu\n", patente);
+		}
+		else
 		{
 			sprintf(responder, "No hay multas registrados de %lu.\n", patente);
 		}
-		else
-		{
-			sprintf(responder, "Funcion de cancelar multas aun en trabajo\n");
-			/*sprintf(responder, "Sea han cancelado todas las multas de %lu\n", patente);*/
-		}
 
 		break;
-	case 'e':
+	case 'e': //mostrar todo las multas
+		strcpy(aux, &peticion[1]);
+		promedio = mostrarRegistros(&lista, aux, linea);
+		if (promedio == -1)
+		{
+			sprintf(responder, "No hay registros en este partido.\n");
+		}
+		else
+		{
+			sprintf(responder, "Registros  existentes de %s\n\nPatente\tTitular\tMultas\tMonton\n %s",aux, linea);
+		}	
+
+		break;
+	case 'x':
 		///Salio un cliente////
 		pid_cliente = atoi(&peticion[1]);
 		printf("Se desconecto un usuario de la sala. Pid: %d\n", pid_cliente);
@@ -296,7 +318,7 @@ void procesarPeticion(const char *peticion, char *responder)
 			}
 		}
 		conectados--;
-		
+
 		break;
 	default:
 		strcpy(responder, "opcion invalida");
