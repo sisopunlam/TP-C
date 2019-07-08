@@ -152,7 +152,9 @@ int main(int argc, char *argv[])
         printf("b. Consultar multas por partido.\n");
         printf("c. Consultar conductores suspendidos.\n");
         printf("d. cancelar multas.\n");
-        printf("e. Salir.\n");
+        printf("e. Ver todas las multas.\n");
+
+        printf("\nx. Salir.\n");
         printf("\nIngrese una opcion: ");
 
         nTecla = 0;
@@ -211,8 +213,7 @@ int main(int argc, char *argv[])
             scanf("%s", peticion);
             msg.monto = atof(peticion);
 
-
-            sprintf(peticion, "a%d,%s,%s,%.2f", msg.patente, msg.partido, msg.titular, msg.monto);
+            sprintf(peticion, "a%d,%s,%s,1,%.2f", msg.patente, msg.partido, msg.titular, msg.monto);
 
             len = send(socket_cliente, peticion, 100, 0); //Se escribe la peticion al servidor
             if (len < 0)
@@ -236,7 +237,7 @@ int main(int argc, char *argv[])
             scanf("%s", peticion);
             msg.patente = atoi(peticion);
 
-            if (msg.patente< 1)
+            if (msg.patente < 1)
             {
                 printf("\n--PATENTE invalido, debe ser mayor a 0.--\nPresione Enter para continuar.");
                 enterParaContinuar();
@@ -259,23 +260,13 @@ int main(int argc, char *argv[])
             enterParaContinuar();
 
             break;
-        case 'c': //Aca deberia enviarle el DNI ,y opcion c.
+        case 'c': //Aca deberia enviarle y opcion c.
 
             //system("clear");
             printf("\033c"); //limpia las pantallas, solo en sistemas unix
             printf("--Menu SUSPENCIONES--\n");
-            printf("\nIngrese la  patente del conductor: ");
-            scanf("%s", peticion);
-            msg.patente = atoi(peticion);
 
-            if (msg.patente < 1)
-            {
-                printf("\n--PATENTE invalido, debe ser mayor a 0.--\nPresione Enter para continuar.");
-                enterParaContinuar();
-                break;
-            }
-
-            sprintf(peticion, "c%d", msg.patente);
+            sprintf(peticion, "c%s", msg.partido);
 
             len = send(socket_cliente, peticion, 100, 0); //Se escribe la peticion al servidor
             if (len < 0)
@@ -309,7 +300,30 @@ int main(int argc, char *argv[])
                 break;
             }
 
-            sprintf(peticion, "d%d", msg.patente);
+            sprintf(peticion, "d%d,%s", msg.patente, msg.partido);
+
+            len = send(socket_cliente, peticion, 100, 0); //Se escribe la peticion al servidor
+            if (len < 0)
+            {
+                printf("Mensaje no enviado!!\n");
+                perror("Mensaje no enviado!!\n");
+                exit(1);
+            }
+
+            memset(peticion, '\0', sizeof(peticion));
+
+            printf("Mensaje enviado, esperando respuesta...\n");
+            pthread_mutex_lock(&mutex); //Espera respuesta
+            printf("Presione Enter para continuar\n");
+            enterParaContinuar();
+            break;
+        case 'e': //Aca deberia enviarle y opcion c.
+
+            //system("clear");
+            printf("\033c"); //limpia las pantallas, solo en sistemas unix
+            printf("--Menu Multas totales--\n");
+
+            sprintf(peticion, "e%s", msg.partido);
 
             len = send(socket_cliente, peticion, 100, 0); //Se escribe la peticion al servidor
             if (len < 0)
@@ -327,7 +341,10 @@ int main(int argc, char *argv[])
             enterParaContinuar();
             break;
 
-        case 'e':
+        case 'x':
+            printf("\033c");
+            printf("cierre socket manulamente (CTRL + C)...\n");
+            enterParaContinuar();
             break;
         default:
             printf("\nOpcion invalida\n");
@@ -352,7 +369,7 @@ void signalHandler(int dummy)
 
 void enterParaContinuar()
 {
-    char tecla = 'b';
+    char tecla = 'e';
     while (tecla != '\n')
     {
         scanf("%c", &tecla);

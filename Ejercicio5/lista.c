@@ -45,11 +45,6 @@ tNodo *registroExitente(tLista *p, t_registro *registro)
 //////////////
 tNodo *ponerEnLista(tLista *p, t_registro *registro)
 {
-    /*tNodo *nue;
-    nue = registroExitente(p, registro);
-    if (nue != NULL)
-        return nue;*/
-
     tNodo *nue = listaLlena();
     nue = listaLlena();
     if (nue == NULL)

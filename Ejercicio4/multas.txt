@@ -1,8 +1,6 @@
-1111,san justo, pepe,30
-2222,san justo,jose,2000
-2222,catan,jose,5000
-3333,san justo,nico,20000
-1234,lafe,jose,5000.00
-1234,lafe,joses,500.00
-666,lafe,luck,25000.00
-999,lafe,jose,1,584.00
+1111,san justo, pepe,4,30.00
+2222,san justo,jose,1,2000.00
+2222,catan,jose,4,5000.00
+3333,san justo,nico,1,20000.00
+555,lafe,mark,1,25000.00
+666,lafe,julian,3,25500.00

@@ -266,6 +266,8 @@ void procesarPeticion(const char *peticion, char *respuesta)
 	float promedio;
 	unsigned long patente;
 	char *partido;
+	char aux[200];
+	char linea[500];
 
 	switch (peticion[0])
 	{
@@ -305,46 +307,62 @@ void procesarPeticion(const char *peticion, char *respuesta)
 		}
 		else
 		{
-			sprintf(respuesta,"Monto total de multas de %s de %lu: %.2f\n", aux, patente, promedio);
+			sprintf(respuesta, "Monto total de multas de %s de %lu: %.2f\n", aux, patente, promedio);
 		}
 
 		////////////////////////////////////
 
 		break;
 	case 'c':
-		///patente////
-
-		patente = strtoul(&peticion[1], &car, 10);
-
-		promedio = registrosSuspender(&lista, patente);
-
+		///partido////
+		strcpy(aux, &peticion[1]);
+		promedio = registrosSuspender(&lista, aux, linea);
 		if (promedio == -1)
 		{
-			sprintf(respuesta, "No hay multas registrados de %lu.\n", patente);
+			sprintf(respuesta, "No hay registros a suspendido.\n");
 		}
 		else
 		{
-			sprintf(respuesta, "Registro a SUSPENDER\nMonto total de multas de %lu: %.2f\n", patente, promedio);
+			sprintf(respuesta, "Registro a SUSPENDER\n %s", linea);
 		}
 		break;
 	case 'd':
-		///patente////
-		patente = strtoul(&peticion[1], &car, 10);
-		promedio = cancelarDeuda(&lista, patente);
-
-		if (promedio == -1)
+		ini = 1;
+		fin = 1;
+		while (peticion[fin] != ',')
 		{
-			sprintf(respuesta, "No hay multas registrados de %lu.\n", patente);
+			fin++;
+		}
+		strncpy(aux, &peticion[ini], fin);
+		aux[fin - ini] = '\0';
+		patente = strtoul(aux, &car, 10);
+		fin++;
+
+		strcpy(aux, &peticion[fin]);
+		if (cancelarDeuda(&lista, patente, aux) != -1)
+		{
+			cargarRegistroEnArchivo(&lista, archivo);
+			sprintf(respuesta, "Sea han cancelado todas las multas de %lu\n", patente);
 		}
 		else
 		{
-			sprintf(respuesta, "Funcion de cancelar multas aun en trabajo\n");
-			/*sprintf(responder, "Sea han cancelado todas las multas de %lu\n", patente);*/
+			sprintf(respuesta, "No hay multas registrados de %lu.\n", patente);
+		}
+		break;
+	case 'e': //mostrar todo las multas
+		strcpy(aux, &peticion[1]);
+		promedio = mostrarRegistros(&lista, aux, linea);
+		if (promedio == -1)
+		{
+			sprintf(respuesta, "No hay registros en este partido.\n");
+		}
+		else
+		{
+			sprintf(respuesta, "Registros  existentes de %s\n\nPatente\tTitular\tMultas\tMonton\n %s", aux, linea);
 		}
 
-		////////////////////////////////////
-
 		break;
+
 	default:
 		strcpy(respuesta, "opcion invalida");
 		break;

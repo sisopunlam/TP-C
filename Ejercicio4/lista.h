@@ -6,7 +6,7 @@ typedef struct
     unsigned long patente;
     char partido[41];
     char titular[20];
-    //int cantidad_m;
+    int cantidad_m;
     float monto;
 } t_registro;
 
@@ -29,7 +29,13 @@ void vaciarLista(tLista *p);
 int cargarListaConArchivo(tLista *pLista, const char *archivo);
 int cargarRegistroEnListaYArchivo(tLista *pLista, const char *archivo, const char *linea);
 float multasPartido(const tLista *p, unsigned long patente, const char *Partido);
-float registrosSuspender(const tLista *p, unsigned long patente);
-float cancelarDeuda(const tLista *p, unsigned long patente);
+float registrosSuspender(const tLista *p, const char *partido, char *linea);
+
+int cancelarDeuda(tLista *p, unsigned long patente, const char *Partido);
+tNodo *eliminarNodo(tNodo *nodo);
+int cargarRegistroEnArchivo(tLista *pLista, const char *archivo);
+
+tNodo *registroExitente(tLista *p, t_registro *registro);
+float mostrarRegistros(const tLista *p, const char *partido, char *linea);
 
 #endif // LISTA_H_INCLUDED
